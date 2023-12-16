@@ -37,6 +37,14 @@ Follow these instructions to set up and run the project locally.
 
 1. Clone the repository.
 2. Install dependencies by running `./gradlew build`.
+3. run `./gradlew run` to start the server at `http://localhost:8081 ` and h2-console on  `http://localhost:8082`
+4. To create configuration.
+   `curl -X POST -d '{"coupon":"Science", "configuration":{
+      userTotalRepeatCount: 3,
+      userPerDayRepeatCount: 1,
+      userPerWeekRepeatCount: 1,
+      globalTotalRepeatCount: 10000
+      }}' -H "Content-Type: application/json" http://localhost:8081/coupon/configuration`
 
 ## Usage
 
