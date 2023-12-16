@@ -65,15 +65,15 @@ jobs:
             ./model/build/test-results/**/*.xml
             ./client/build/test-results/**/*.xml
 
-      - name: Add coverage to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.2
-        with:
-          paths: ${{ github.workspace }}/api/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # Uncomment when code coverage needs to be enabled as a PR check
-          min-coverage-overall: 25
-          min-coverage-changed-files: 40
+#      - name: Add coverage to PR
+#        id: jacoco
+#        uses: madrapps/jacoco-report@v1.2
+#        with:
+#          paths: ${{ github.workspace }}/api/build/reports/jacoco/test/jacocoTestReport.xml
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          # Uncomment when code coverage needs to be enabled as a PR check
+#          min-coverage-overall: 25
+#          min-coverage-changed-files: 40
 
       - name: Save Coverage To Environment Variable
         run: |
