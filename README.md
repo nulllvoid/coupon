@@ -18,6 +18,7 @@ This Kotlin controller handles coupon-related operations.
 ## Introduction
 
 This Kotlin controller is part of the coupon-related functionalities in the project. It interacts with the Coupon Service to handle the creation, validation, and application of coupon codes.
+Tech Stack: Micronaut Framework,Kotlin,Flyway,Gradle
 
 ## Features
 
