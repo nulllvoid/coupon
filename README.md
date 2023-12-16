@@ -31,7 +31,7 @@ Follow these instructions to set up and run the project locally.
 
 ### Prerequisites
 
-- [List any prerequisites or dependencies required to run the project]
+- Graalvm Java v17
 
 ### Installation
 
