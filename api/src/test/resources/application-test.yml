@@ -1,0 +1,38 @@
+environment: ${MICRONAUT_ENVIRONMENTS:test}
+micronaut:
+  application:
+    name: couponTest
+  server:
+    port: ${SERVER_PORT:8081}
+    context-path: /coupon
+    cors:
+      enabled: true
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+
+http:
+  client:
+    read-timeout: 30s
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+r2dbc:
+  datasources:
+    default:
+      url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:6432}/${DB_NAME:coupon-test}?preparedStatementCacheQueries=0
+      username: ${DB_USER:postgres}
+      password: ${DB_PASSWORD:postgres123}
+      dialect: POSTGRES
+
+sentry:
+  enabled: ${SENTRY_ENABLED:false}
+  dsn: ${SENTRY_DSN:`https://45210f784ee745e18fdcaf7b3713bada@o435527.ingest.sentry.io/6474999`}

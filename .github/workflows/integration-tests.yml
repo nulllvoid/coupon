@@ -1,0 +1,92 @@
+name: Tests
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  packages: write
+  issues: read
+  checks: write
+  pull-requests: write
+
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres123
+  POSTGRES_DB: validity
+  MICRONAUT_ENVIRONMENT: "test"
+
+jobs:
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14.2-alpine3.15
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'gradle'
+
+      - name: Run tests with code coverage
+        run: |
+          sudo timedatectl set-timezone Asia/Kolkata
+          ./gradlew flywayMigrate jacocoTestReport --no-daemon
+        env:
+          GITHUB_USERNAME:  ${{ secrets.GITHUB_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: |
+            ./api/build/test-results/**/*.xml
+            ./model/build/test-results/**/*.xml
+            ./client/build/test-results/**/*.xml
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.2
+        with:
+          paths: ${{ github.workspace }}/api/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Uncomment when code coverage needs to be enabled as a PR check
+          min-coverage-overall: 25
+          min-coverage-changed-files: 40
+
+      - name: Save Coverage To Environment Variable
+        run: |
+          echo "TOTAL_COVERAGE=${{ steps.jacoco.outputs.coverage-overall }}" >> $GITHUB_ENV
+          echo "CHANGED_FILES_COVERAGE=${{ steps.jacoco.outputs.coverage-changed-files }}" >> $GITHUB_ENV
+
+      - name: Coverage-check
+        run: |
+          import os
+          import sys
+          print("Total Coverage: " + str(os.environ["TOTAL_COVERAGE"]))
+          if float(os.environ["TOTAL_COVERAGE"]) < 21 or float(os.environ["CHANGED_FILES_COVERAGE"]) < 30:
+            print("Insufficient Coverage!")
+            sys.exit(-1) # Cause Status Check Failure due to noncompliant coverage
+          sys.exit(0)
+        shell: python

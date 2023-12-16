@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.2-alpine3.15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: your_database_name
+    volumes:
+      - "coupon_data:/var/lib/postgresql/data"
+
+volumes:
+  coupon_data:
