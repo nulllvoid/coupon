@@ -1,11 +1,21 @@
 package com.nullvoid.coupon.model
 
+import io.micronaut.core.annotation.Introspected
+import io.micronaut.core.annotation.NonNull
 import io.micronaut.serde.annotation.Serdeable
 
+@Introspected
 @Serdeable
 data class Configuration(
-    val globalTotalRepeatCount: Int,
-    val userTotalRepeatCount: Int,
-    val userDailyRepeatCount: Int,
-    val userWeeklyRepeatCount: Int
+    @field:NonNull
+    val globalTotalRepeatCount: Int = 0,
+
+    @field:NonNull
+    val userTotalRepeatCount: Int = 0,
+
+    @field:NonNull
+    val userDailyRepeatCount: Int = 0,
+
+    @field:NonNull
+    val userWeeklyRepeatCount: Int = 0
 )

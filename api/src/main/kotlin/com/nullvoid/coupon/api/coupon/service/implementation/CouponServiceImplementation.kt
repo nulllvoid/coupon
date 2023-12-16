@@ -7,6 +7,7 @@ import com.nullvoid.coupon.api.coupon.repository.userCouponUsage.UserCouponUsage
 import com.nullvoid.coupon.api.coupon.service.interfaces.CouponService
 import com.nullvoid.coupon.api.utils.exception.CouponError
 import com.nullvoid.coupon.api.utils.exception.CouponException
+import com.nullvoid.coupon.model.Configuration
 import com.nullvoid.coupon.model.enums.Validity
 import com.nullvoid.coupon.model.request.CreateConfigurationRequest
 import jakarta.inject.Singleton
@@ -22,6 +23,7 @@ open class CouponServiceImplementation(
         if (couponConfigRepo.couponExists(request.couponCode)) {
             return "Coupon ${request.couponCode} Already Exists"
         }
+        validateConfiguration(request.configuration)
         val couponConfiguration = CouponConfiguration(
             couponCode = request.couponCode,
             globalTotalRepeatCount = request.configuration.globalTotalRepeatCount,
@@ -31,6 +33,15 @@ open class CouponServiceImplementation(
         )
         couponConfigRepo.save(couponConfiguration)
         return "SuccessFully Added Configuration to ${request.couponCode}"
+    }
+    private fun validateConfiguration(configuration: Configuration) {
+        if (configuration.globalTotalRepeatCount < 1 ||
+            configuration.userDailyRepeatCount < 1 ||
+            configuration.userTotalRepeatCount < 1 ||
+            configuration.userWeeklyRepeatCount < 1
+        ) {
+            throw CouponException(CouponError.ERR_1003, "  : Invalid Request, Note: count values cannot be 0 or null")
+        }
     }
 
     override suspend fun isValid(couponCode: String, userId: String): Validity {

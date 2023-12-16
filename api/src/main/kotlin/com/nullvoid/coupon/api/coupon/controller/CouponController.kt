@@ -12,6 +12,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.validation.Validated
 import jakarta.inject.Inject
+import javax.validation.Valid
 
 @Validated
 @Controller
@@ -23,7 +24,7 @@ class CouponController(
     lateinit var couponService: CouponService
 
     @Post("/configuration")
-    suspend fun createConfiguration(@Body request: CreateConfigurationRequest): String {
+    suspend fun createConfiguration(@Body @Valid request: CreateConfigurationRequest): String {
         return couponService.createConfiguration(request)
     }
     @Get("/isValid")

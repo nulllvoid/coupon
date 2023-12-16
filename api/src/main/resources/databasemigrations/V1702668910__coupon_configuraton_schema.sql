@@ -6,7 +6,7 @@ CREATE TABLE COUPONCONFIGURATION(
   globalTotalRepeatCount INT NOT NULL,
   userTotalRepeatCount INT NOT NULL,
   userDailyRepeatCount INT NOT NULL,
-  userWeeklyRepeatCount INT NOT NULL./
+  userWeeklyRepeatCount INT NOT NULL
 );
 CREATE TABLE USERCOUPONUSAGE (
     id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
