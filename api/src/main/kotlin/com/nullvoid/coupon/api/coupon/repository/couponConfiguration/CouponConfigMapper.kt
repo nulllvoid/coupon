@@ -7,9 +7,11 @@ import org.apache.ibatis.annotations.Select
 
 interface CouponConfigMapper {
 
-    @Insert("insert into couponConfiguration" +
+    @Insert(
+        "insert into couponConfiguration" +
             "(couponCode,globalTotalRepeatCount,userTotalRepeatCount,userDailyRepeatCount,userWeeklyRepeatCount) " +
-            "values(#{couponCode}, #{globalTotalRepeatCount}, #{userTotalRepeatCount}, #{userDailyRepeatCount}, #{userWeeklyRepeatCount})")
+            "values(#{couponCode}, #{globalTotalRepeatCount}, #{userTotalRepeatCount}, #{userDailyRepeatCount}, #{userWeeklyRepeatCount})"
+    )
     @Options(keyProperty = "couponCode")
     fun save(couponConfiguration: CouponConfiguration)
 

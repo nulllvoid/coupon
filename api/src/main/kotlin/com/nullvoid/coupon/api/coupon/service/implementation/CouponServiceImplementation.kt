@@ -19,7 +19,7 @@ open class CouponServiceImplementation(
 ) : CouponService {
 
     override suspend fun createConfiguration(request: CreateConfigurationRequest): String {
-        if(couponConfigRepo.couponExists(request.couponCode)){
+        if (couponConfigRepo.couponExists(request.couponCode)) {
             return "Coupon ${request.couponCode} Already Exists"
         }
         val couponConfiguration = CouponConfiguration(
@@ -67,9 +67,9 @@ open class CouponServiceImplementation(
                 )
             )
         } else {
-            if(response == Validity.INVALID)
+            if (response == Validity.INVALID)
                 throw CouponException(CouponError.ERR_1000, ": couponCode: $couponCode")
-            if(response == Validity.EXPIRED)
+            if (response == Validity.EXPIRED)
                 throw CouponException(CouponError.ERR_1002, ": couponCode: $couponCode")
         }
     }

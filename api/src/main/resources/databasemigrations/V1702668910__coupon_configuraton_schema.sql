@@ -3,10 +3,10 @@ DROP TABLE IF EXISTS USERCOUPONUSAGE;
 
 CREATE TABLE COUPONCONFIGURATION(
   couponCode VARCHAR(100) PRIMARY KEY NOT NULL,
-  globalTotalRepeatCount INT,
-  userTotalRepeatCount INT,
-  userDailyRepeatCount INT,
-  userWeeklyRepeatCount INT
+  globalTotalRepeatCount INT NOT NULL,
+  userTotalRepeatCount INT NOT NULL,
+  userDailyRepeatCount INT NOT NULL,
+  userWeeklyRepeatCount INT NOT NULL./
 );
 CREATE TABLE USERCOUPONUSAGE (
     id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
