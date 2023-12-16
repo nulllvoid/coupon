@@ -25,14 +25,19 @@ netty:
     allocator:
       max-order: 3
 
-r2dbc:
+datasources:
+  default:
+    url: jdbc:h2:mem:default;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: ""
+    driverClassName: org.h2.Driver
+
+h2:
+  console:
+    enabled: true
+
+flyway:
   datasources:
     default:
-      url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:6432}/${DB_NAME:coupon-test}?preparedStatementCacheQueries=0
-      username: ${DB_USER:postgres}
-      password: ${DB_PASSWORD:postgres123}
-      dialect: POSTGRES
-
-sentry:
-  enabled: ${SENTRY_ENABLED:false}
-  dsn: ${SENTRY_DSN:`https://45210f784ee745e18fdcaf7b3713bada@o435527.ingest.sentry.io/6474999`}
+      locations: classpath:databasemigrations
+      enable: true

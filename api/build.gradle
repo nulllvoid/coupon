@@ -64,6 +64,7 @@ dependencies {
     runtimeOnly("io.jaegertracing:jaeger-thrift:1.8.1")
 
     implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.flyway:micronaut-flyway")
 }
 
 sonarqube {
