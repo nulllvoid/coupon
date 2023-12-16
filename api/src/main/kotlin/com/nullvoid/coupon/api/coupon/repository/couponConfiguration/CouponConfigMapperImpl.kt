@@ -24,6 +24,13 @@ open class CouponConfigMapperImpl(
         }
     }
 
+    @Transactional
+    override fun isCouponCodeConfigured(couponCode: String): Boolean {
+        sqlSessionFactory.openSession().use { sqlSession ->
+            return getCouponConfigurationRepo(sqlSession).isCouponCodeConfigured(couponCode)
+        }
+    }
+
     private fun getCouponConfigurationRepo(sqlSession: SqlSession): CouponConfigMapper {
         return sqlSession.getMapper(CouponConfigMapper::class.java)
     }

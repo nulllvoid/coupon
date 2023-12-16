@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select
 
 interface UserCouponUsageMapper {
 
-    @Insert("insert into UserCouponUsage(userId, couponCode, usageDate) values(#{userId}, #{couponCode}, #{usageDate})")
+    @Insert("INSERT INTO UserCouponUsage(userId, couponCode, usageDate) VALUES (#{userId}, #{couponCode}, CURRENT_DATE)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     fun save(userCouponUsage: UserCouponUsage)
 
@@ -23,24 +23,13 @@ interface UserCouponUsageMapper {
 
     @Select(
         """
-        SELECT COUNT(*)
-        FROM UserCouponUsage
-        WHERE user_id = #{userId}
-          AND coupon_code = #{couponCode}
-          AND DATE(usage_fate) = CURDATE();
+    SELECT COUNT(*) as userWeeklyUsage
+    FROM UserCouponUsage
+    WHERE userId = #{userId}
+  AND couponCode = #{couponCode}
+  AND usageDate >= DATEADD('DAY', - (DAYOFWEEK(CURDATE()) - 1), CURDATE())
+  AND usageDate < DATEADD('DAY', 7, DATEADD('DAY', - (DAYOFWEEK(CURDATE()) - 1), CURDATE()));
     """
-    )
-    fun getUserDailyUsage(couponCode: String, userId: String): Int
-
-    @Select(
-        """
-        SELECT COUNT(*) as userWeeklyUsage
-        FROM UserCouponUsage
-        WHERE user_id = #{userId}
-          AND coupon_code =#{couponCode}
-          AND usageDate >= DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE()) - 1 DAY)
-          AND usageDate < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE()) - 1 DAY), INTERVAL 7 DAY);
-        """
     )
     fun getUserWeeklyUsage(couponCode: String, userId: String): Int
 
@@ -52,6 +41,17 @@ interface UserCouponUsageMapper {
     """
     )
     fun getGlobalUsageCount(couponCode: String): Int
+
+    @Select(
+        """
+    SELECT COUNT(*) as userDailyUsage
+    FROM UserCouponUsage
+    WHERE userId = #{userId}
+      AND couponCode = #{couponCode}
+      AND usageDate = CURRENT_DATE
+    """
+    )
+    fun getUserDailyUsage(couponCode: String, userId: String): Int
 
     @Select(
         """

@@ -6,4 +6,6 @@ interface CouponConfigRepository {
 
     fun findByCouponCode(couponCode: String): CouponConfiguration?
     fun save(couponConfiguration: CouponConfiguration): CouponConfiguration
+
+    fun couponExists(couponCode: String): Boolean
 }

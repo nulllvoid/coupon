@@ -17,4 +17,8 @@ open class CouponConfigRepoImpl(
         couponConfigMapper.save(couponConfiguration)
         return couponConfiguration
     }
+
+    override fun couponExists(couponCode: String): Boolean {
+        return couponConfigMapper.isCouponCodeConfigured(couponCode)
+    }
 }
