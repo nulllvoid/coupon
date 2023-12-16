@@ -20,7 +20,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @MicronautTest(transactional = false)
@@ -68,6 +67,6 @@ class CouponConfigurationTest(
             globalTotalRepeatCount = createConfigurationRequest.configuration.globalTotalRepeatCount
         )
         Assertions.assertEquals(HttpStatus.OK, response.status)
-        Assertions.assertEquals(couponConfigRepository.findByCouponCode(createConfigurationRequest.couponCode),expectedResponse)
+        Assertions.assertEquals(couponConfigRepository.findByCouponCode(createConfigurationRequest.couponCode), expectedResponse)
     }
 }
